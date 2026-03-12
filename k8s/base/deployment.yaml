@@ -1,0 +1,24 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: sample-service
+spec:
+  replicas: 2
+  selector:
+    matchLabels: { app: sample-service }
+  template:
+    metadata:
+      labels: { app: sample-service }
+    spec:
+      containers:
+        - name: sample-service
+          image: ghcr.io/example/sample-service:v1.0.0
+          ports:
+            - containerPort: 3000
+          securityContext:
+            runAsNonRoot: true
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+          resources:
+            requests: { cpu: "100m", memory: "128Mi" }
+            limits: { cpu: "500m", memory: "512Mi" }

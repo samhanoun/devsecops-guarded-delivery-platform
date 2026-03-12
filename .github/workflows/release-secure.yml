@@ -1,0 +1,27 @@
+name: release-secure
+on:
+  push:
+    branches: [ main ]
+
+permissions:
+  contents: read
+  id-token: write
+  packages: write
+
+jobs:
+  build-sign-attest:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Build image
+        run: echo "Placeholder: docker build -t ghcr.io/ORG/IMAGE:${GITHUB_SHA} ."
+
+      - name: Generate SBOM
+        run: echo "Placeholder: syft packages image > sbom.spdx.json"
+
+      - name: Sign image
+        run: echo "Placeholder: cosign sign --yes ghcr.io/ORG/IMAGE:${GITHUB_SHA}"
+
+      - name: Attest provenance
+        run: echo "Placeholder: cosign attest ..."

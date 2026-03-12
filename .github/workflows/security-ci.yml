@@ -1,0 +1,41 @@
+name: security-ci
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  security-events: write
+
+jobs:
+  security-gates:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Install deps
+        run: |
+          if [ -f package.json ]; then npm ci || npm i; fi
+
+      - name: Secret scan (gitleaks)
+        uses: gitleaks/gitleaks-action@v2
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: SAST (semgrep)
+        uses: returntocorp/semgrep-action@v1
+
+      - name: Dependency audit
+        run: |
+          if [ -f package.json ]; then npm audit --audit-level=high; fi
+
+      - name: IaC policy check (conftest)
+        uses: instrumenta/conftest-action@master
+        with:
+          files: k8s/base
+          policy: policies/opa
