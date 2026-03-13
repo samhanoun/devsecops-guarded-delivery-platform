@@ -1,7 +1,9 @@
 name: release-secure
+
 on:
   push:
-    branches: [ main ]
+    branches: [ master, main ]
+  workflow_dispatch:
 
 permissions:
   contents: read
@@ -14,14 +16,14 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
-      - name: Build image
+      - name: Build image (placeholder)
         run: echo "Placeholder: docker build -t ghcr.io/ORG/IMAGE:${GITHUB_SHA} ."
 
-      - name: Generate SBOM
+      - name: Generate SBOM (placeholder)
         run: echo "Placeholder: syft packages image > sbom.spdx.json"
 
-      - name: Sign image
+      - name: Sign image (placeholder)
         run: echo "Placeholder: cosign sign --yes ghcr.io/ORG/IMAGE:${GITHUB_SHA}"
 
-      - name: Attest provenance
+      - name: Attest provenance (placeholder)
         run: echo "Placeholder: cosign attest ..."
